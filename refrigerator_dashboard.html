@@ -1,0 +1,44 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="Refrigerator Dashboard" content="A dashboard for users who wish to monitor their sensors temperatures and humidities."/>
+    <title>Refrigerator Dashboard</title>
+    <script src="pureknob.js"></script> <!-- Script for temperature/humidity gauge -->
+    <!-- The link: https://www.cssscript.com/canvas-javascript-knob-dial-component/ -->
+</head>
+<body>
+    <header> <!-- Header for the website -->
+        <br>
+        <h1>Refrigerator Dashboard</h1>
+        <br>
+        <hr>
+    </header>
+    <main> <!-- Body for the rest of dashboard will go -->
+        <div id="fridge1"> <!-- Section for all content pertaining to refrigerator 1 -->
+            <div id="temp1"> <!-- Section for the temperature of refrigerator 1 -->
+                Temperature 1 will go here <!-- TODO: Change/Adapt Code -->
+            </div>
+            <div id="hum1"> <!-- Section for the humidity of refrigerator 1 -->
+                Humidity 1 will go here <!-- TODO: Change/Adapt Code -->
+            </div>
+        </div>
+        <div id="fridge2"> <!-- Section for all content pertaining to refrigerator 2 -->
+            <div id="temp2"> <!-- Section for the temperature of refrigerator 2 -->
+                Temperature 2 will go here <!-- TODO: Change/Adapt Code -->
+            </div>
+            <div id="hum2"> <!-- Section for the humidity of refrigerator 2 -->
+                Humidity 2 will go here <!-- TODO: Change/Adapt Code -->
+            </div>
+        </div>
+        <div id="fan"> <!-- Section for the fan - Displays the status of the fan based on the temperatures -->
+            <!-- NOTE: The fan could be placed either on the right of both temperatures or underneath the other temperatures -->
+             Fan Status and Information will go here <!-- TODO: Change/Adapt Code -->
+        </div>
+    </main>
+    <footer> <!-- Footer for the website -->
+    <script src="refrigeratorDashboard.js" onload="createDashboards()"></script> <!-- Import Refrigerator Dashboard controller script -->
+    </footer>
+</body>
+</html>
