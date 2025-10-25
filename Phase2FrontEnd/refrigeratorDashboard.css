@@ -1,0 +1,159 @@
+body {
+  background-color: #f8f9fa;
+  font-family: Arial, sans-serif;
+  text-align: center;
+  margin: 0;
+  padding: 0;
+}
+
+.header-container {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  width: 85%;
+  margin: 20px auto;
+}
+
+#addUserBtn {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 16px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+
+#addUserBtn:hover {
+  background-color: #0056b3;
+}
+
+hr {
+  margin: 15px auto;
+  width: 90%;
+}
+
+#fridge1, #fridge2 {
+  display: flex;
+  justify-content: center;
+  align-items: stretch;
+  gap: 25px;
+  margin: 25px auto;
+  width: 80%;
+  background-color: #e9ecef;
+  border-radius: 12px;
+  padding: 30px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+}
+
+.sensor-box {
+  flex: 1;
+  background-color: #ffffff;
+  border-radius: 12px;
+  padding: 35px 20px;
+  text-align: center;
+  font-size: 14px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 1px 6px rgba(0,0,0,0.08);
+}
+
+.sensor-box h2 {
+  font-size: 18px;
+  font-weight: 600;
+  margin-bottom: 20px;
+  color: #333;
+}
+
+canvas {
+  width: 380px !important;
+  height: 190px !important;
+  margin: 20px 0;
+}
+
+.modifiers {
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+  margin-top: 10px;
+  width: 75%;
+  max-width: 250px;
+}
+
+.max {
+  display: flex;
+  justify-content: center;
+  align-self: center;
+  gap: 10px;
+  width: 60%;
+}
+
+.max input {
+  width: 60px;
+  padding: 4px, 6px;
+  border-radius: 5px;
+  border: 1px solid #ccc;
+  font-size: 12px;
+  text-align: center;
+  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+}
+
+.customize-btn {
+  width: 100px;
+  align-self: center;
+  margin-top: 10px;
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 8px 14px;
+  font-size: 14px;
+  cursor: pointer;
+  transition: 0.2s ease-in-out;
+}
+
+.customize-btn:hover {
+  background-color: #0056b3;
+}
+
+#fan {
+  background-color: #ffffff;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+  margin: 30px auto;
+  padding: 20px;
+  width: 50%;
+  text-align: center;
+}
+
+#fanButton {
+  background-color: #007bff;
+  color: white;
+  border: none;
+  border-radius: 6px;
+  padding: 10px 20px;
+  font-size: 14px;
+  cursor: pointer;
+}
+
+#fanButton:hover {
+  background-color: #0056b3;
+}
+
+@media (max-width: 768px) {
+  #fridge1, #fridge2 {
+    flex-direction: column;
+    width: 90%;
+  }
+
+  .sensor-box {
+    width: 100%;
+  }
+
+  #fan {
+    width: 80%;
+  }
+}

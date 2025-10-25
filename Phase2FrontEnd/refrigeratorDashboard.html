@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta
+      name="Refrigerator Dashboard"
+      content="A dashboard for users who wish to monitor their sensors temperatures and humidities."
+    />
+    <title>Refrigerator Dashboard</title>
+    <script src="pureknob.js"></script>
+    <!-- Script for temperature/humidity gauge -->
+    <!-- The link: https://www.cssscript.com/canvas-javascript-knob-dial-component/ -->
+    <!-- Bootstrap Links -->
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB"
+      crossorigin="anonymous"
+    />
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI"
+      crossorigin="anonymous"
+    ></script>
+    <!-- External CSS for layout and visuals -->
+    <link rel="stylesheet" href="refrigeratorDashboard.css" />
+  </head>
+  <body>
+    <header>
+      <div class="header-container">
+        <h1>Refrigerator Dashboard</h1>
+        <button id="addUserBtn" class="btn btn-primary">Add User</button>
+      </div>
+      <hr />
+    </header>
+    <main>
+      <!-- Body for the rest of dashboard will go -->
+      <div id="fridge1">
+        <!-- Section for all content pertaining to refrigerator 1 -->
+        <div id="temp1" class="sensor-box">
+          <!-- Section for the temperature of refrigerator 1 -->
+          <div id="temp1Gauge"></div>
+          <!-- Gauge for temperature 1 -->
+          <div id="temp1Modifiers" class="modifiers">
+            <div class="max">
+              <input type="text" placeholder="Max" name="maxTemp1" />
+            </div>
+            <button class="customize-btn">Customize</button>
+          </div>
+        </div>
+        <div id="hum1" class="sensor-box">
+          <!-- Section for the humidity of refrigerator 1 -->
+          <div id="hum1Gauge"></div>
+          <!-- Gauge for humidity 1 -->
+          <div id="hum1Modifiers" class="modifiers">
+            <div class="max">
+              <input type="text" placeholder="Max" name="maxHum1" />
+            </div>
+            <button class="customize-btn">Customize</button>
+          </div>
+        </div>
+      </div>
+      <div id="fridge2">
+        <!-- Section for all content pertaining to refrigerator 2 -->
+        <div id="temp2" class="sensor-box">
+          <!-- Section for the temperature of refrigerator 2 -->
+          <div id="temp2Gauge"></div>
+          <!-- Gauge for temperature 2 -->
+          <div id="temp2Modifiers" class="modifiers">
+            <div class="max">
+              <input type="text" placeholder="Max" name="maxTemp2" />
+            </div>
+            <button class="customize-btn">Customize</button>
+          </div>
+        </div>
+        <div id="hum2" class="sensor-box">
+          <!-- Section for the humidity of refrigerator 2 -->
+          <div id="hum2Gauge"></div>
+          <!-- Gauge for humidity 2 -->
+          <div id="hum2Modifiers" class="modifiers">
+            <div class="max">
+              <input type="text" placeholder="Max" name="maxHum2" />
+            </div>
+            <button class="customize-btn">Customize</button>
+          </div>
+        </div>
+      </div>
+      <div id="fan">
+        <!-- Section for the fan - Displays the status of the fan based on the temperatures -->
+        <div id="fanInfo"></div>
+        <div id="fanButtonDiv">
+          <button id="fanButton" onclick="manuallyControlFan()">
+            Manually Turn On
+          </button>
+        </div>
+      </div>
+      <div id="test"></div>
+      <!-- Placeholder for debugging/testing -->
+    </main>
+    <footer>
+      <!-- Footer for the website -->
+      <script
+        src="refrigeratorDashboard.js"
+        onload="createDashboards()"
+      ></script>
+      <!-- Import Refrigerator Dashboard controller script -->
+    </footer>
+  </body>
+</html>
