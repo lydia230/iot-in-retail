@@ -106,8 +106,8 @@
 
 <?php
 $servername = "localhost";
-$username = "root";
-$password = "";
+$username = "admin";
+$password = "123";
 $dbname = "rfid";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
@@ -128,7 +128,7 @@ if (isset($_POST['save1']) || isset($_POST['save2'])) {
   if (!is_numeric($maxTemp) || $maxTemp <= 0 || $maxTemp > 100) {
     echo "<script>alert('Invalid temperature value. Must be between 0°C and 100°C.');</script>";
   } else {
-    $sql = "UPDATE Temperature SET Temp_threshold = '$maxTemp', Fridge_num = '$fridgeNum' WHERE Temp_id = 1";
+    $sql = "UPDATE Temperature SET Temp_threshold = '$maxTemp' WHERE Temp_id = '$fridgeNum'";
     if ($conn->query($sql) === TRUE) {
       echo "<script>alert('New max threshold $maxTemp saved for Fridge $fridgeNum!');</script>";
     } else {

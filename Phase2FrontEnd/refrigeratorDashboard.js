@@ -1,7 +1,7 @@
 let tempGauge1, humGauge1, tempGauge2, humGauge2;
 let fanDesign;  // persistent fan gauge
 let isFanON = false;
-
+let thresholds = [];
 
 async function createDashboards() {
     if (!tempGauge1) {  // Only create if not already created
@@ -91,7 +91,7 @@ function manuallyControlFan() {
         fan.setProperty('colorLabel', '#22ff00ff');
         fan.setProperty('label', 'Fan On');
         fetch("fan_on.php")
-            .then(() => {})
+            .then(() => { })
             .catch(err => console.error("Error running fan:", err));
     } else {
         button.textContent = 'Manually Turn On';
@@ -100,7 +100,7 @@ function manuallyControlFan() {
         fan.setProperty('colorLabel', '#ff0000ff');
         fan.setProperty('label', 'Fan Off');
         fetch("fan_off.php")
-            .then(() => {})
+            .then(() => { })
             .catch(err => console.error("Error running fan:", err));
     }
 
@@ -161,6 +161,14 @@ document.addEventListener("DOMContentLoaded", () => {
         const data = JSON.parse(message.payloadString);
         const topic = message.destinationName;
 
+        fetch('get_threshold.php')
+            .then(res => res.text())
+            .then(data => { 
+                thresholds = JSON.parse(data)
+                console.log(thresholds);
+            })
+            .catch(err => console.error('Could not fetch thresholds:', err));
+
         if (topic === "sensor/fridge1") {
             tempGauge1.setValue(data.temperature);
             humGauge1.setValue(data.humidity);
@@ -169,9 +177,14 @@ document.addEventListener("DOMContentLoaded", () => {
             humGauge2.setValue(data.humidity);
         }
 
-        if (data.temperature > 60 && emailSent === false) {
+        console.log(thresholds[1]);
+        if (
+            ((topic === "sensor/fridge1" && data.temperature > thresholds[1]) ||
+                (topic === "sensor/fridge2" && data.temperature > thresholds[2])) &&
+            emailSent === false
+        ) {
             emailSent = true;
-
+            alert(`High temperature Warning: ${data.temperature}`);
             fetch("send_email.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/json" },
@@ -183,40 +196,40 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-   setInterval(() => {
-    // Only check for reply if an alert email was sent
-    console.log(emailSent);
-    if (emailSent) {
-        fetch("client_reply.php")
-            .then(res => res.text())
-            .then(text => {
-                let reply;
-                try {
-                    reply = JSON.parse(text);
+    setInterval(() => {
 
-                    if (reply.status === "yes") {
-                        setFanGauge(true); // turn gauge green
-                        console.log("Fan started");
-                        fetch("fan.php")
-                            .then(() => {
-                                emailSent = false; // reset after fan runs
-                                setFanGauge(false);
-                            })
-                            .catch(err => console.error("Error running fan:", err));
-                    } else if (reply.status === "no") {
-                        setFanGauge(false); // turn gauge red
-                        console.log("Fan stopped");
-                        emailSent = false; // reset after manual stop
+        console.log(emailSent);
+        if (emailSent) {
+            fetch("client_reply.php")
+                .then(res => res.text())
+                .then(text => {
+                    let reply;
+                    try {
+                        reply = JSON.parse(text);
+
+                        if (reply.status === "yes") {
+                            setFanGauge(true); 
+                            console.log("Fan started");
+                            fetch("fan.php")
+                                .then(() => {
+                                    emailSent = false; 
+                                    setFanGauge(false);
+                                })
+                                .catch(err => console.error("Error running fan:", err));
+                        } else if (reply.status === "no") {
+                            setFanGauge(false); 
+                            console.log("Fan stopped");
+                            emailSent = false;
+                        }
+                    } catch (e) {
+                        console.error("Failed to parse JSON:", e, text);
                     }
-                } catch (e) {
-                    console.error("Failed to parse JSON:", e, text);
-                }
-            })
-            .catch(err => {
-                console.error("Error fetching client reply:", err);
-            });
-    }
-}, 10000);
+                })
+                .catch(err => {
+                    console.error("Error fetching client reply:", err);
+                });
+        }
+    }, 10000);
 
 });
 
