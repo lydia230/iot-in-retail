@@ -12,7 +12,10 @@
     <!-- Script for temperature/humidity gauge -->
     <!-- The link: https://www.cssscript.com/canvas-javascript-knob-dial-component/ -->
     <!-- Bootstrap Links -->
-      <script src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js" type="text/javascript"></script>
+    <script
+      src="https://cdnjs.cloudflare.com/ajax/libs/paho-mqtt/1.0.1/mqttws31.js"
+      type="text/javascript"
+    ></script>
     <link
       href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
       rel="stylesheet"
@@ -28,13 +31,16 @@
     <link rel="stylesheet" href="refrigeratorDashboard.css" />
   </head>
   <body>
-    <header>
-      <div class="header-container">
-        <h1>Refrigerator Dashboard</h1>
-        <button id="addUserBtn" class="btn btn-primary">Add User</button>
-      </div>
-      <hr />
-    </header>
+<header>
+  <div class="header-container">
+    <div class="tabs">
+      <a href="index.php" class="tab">Add Users</a>
+      <a href="refrigeratorDashboard.php" class="tab active">Dashboards</a>
+    </div>
+    <h1>Refrigerator Dashboard</h1>
+  </div>
+  <hr />
+</header>
     <main>
       <!-- Body for the rest of dashboard will go -->
       <div id="fridge1">
@@ -44,22 +50,17 @@
           <div id="temp1Gauge"></div>
           <!-- Gauge for temperature 1 -->
           <div id="temp1Modifiers" class="modifiers">
-            <div class="max">
-              <input type="text" placeholder="Max" name="maxTemp1" />
-            </div>
-            <button class="customize-btn">Customize</button>
+            <form method="POST" action="">
+              <div class="max">
+                <input type="text" placeholder="Max" name="maxTemp1" required />
+              </div>
+              <input type="hidden" name="fridge_num" value="1" />
+              <button type="submit" class="customize-btn" name="save1">Customize</button>
+            </form>
           </div>
         </div>
         <div id="hum1" class="sensor-box">
           <!-- Section for the humidity of refrigerator 1 -->
-          <div id="hum1Gauge"></div>
-          <!-- Gauge for humidity 1 -->
-          <div id="hum1Modifiers" class="modifiers">
-            <div class="max">
-              <input type="text" placeholder="Max" name="maxHum1" />
-            </div>
-            <button class="customize-btn">Customize</button>
-          </div>
         </div>
       </div>
       <div id="fridge2">
@@ -69,22 +70,17 @@
           <div id="temp2Gauge"></div>
           <!-- Gauge for temperature 2 -->
           <div id="temp2Modifiers" class="modifiers">
-            <div class="max">
-              <input type="text" placeholder="Max" name="maxTemp2" />
-            </div>
-            <button class="customize-btn">Customize</button>
+            <form method="POST" action="">
+              <div class="max">
+                <input type="text" placeholder="Max" name="maxTemp2" required />
+              </div>
+              <input type="hidden" name="fridge_num" value="2" />
+              <button type="submit" class="customize-btn" name="save2">Customize</button>
+            </form>
           </div>
         </div>
         <div id="hum2" class="sensor-box">
           <!-- Section for the humidity of refrigerator 2 -->
-          <div id="hum2Gauge"></div>
-          <!-- Gauge for humidity 2 -->
-          <div id="hum2Modifiers" class="modifiers">
-            <div class="max">
-              <input type="text" placeholder="Max" name="maxHum2" />
-            </div>
-            <button class="customize-btn">Customize</button>
-          </div>
         </div>
       </div>
       <div id="fan">
@@ -107,5 +103,41 @@
       ></script>
       <!-- Import Refrigerator Dashboard controller script -->
     </footer>
+
+<?php
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "rfid";
+
+$conn = new mysqli($servername, $username, $password, $dbname);
+
+if ($conn->connect_error) {
+  die("Connection Failed: " . $conn->connect_error);
+}
+
+if (isset($_POST['save1']) || isset($_POST['save2'])) {
+  $fridgeNum = intval($_POST['fridge_num']);
+
+  if ($fridgeNum == 1) {
+    $maxTemp = $_POST['maxTemp1'];
+  } else {
+    $maxTemp = $_POST['maxTemp2'];
+  }
+
+  if (!is_numeric($maxTemp) || $maxTemp <= 0 || $maxTemp > 100) {
+    echo "<script>alert('Invalid temperature value. Must be between 0°C and 100°C.');</script>";
+  } else {
+    $sql = "UPDATE Temperature SET Temp_threshold = '$maxTemp', Fridge_num = '$fridgeNum' WHERE Temp_id = 1";
+    if ($conn->query($sql) === TRUE) {
+      echo "<script>alert('New max threshold $maxTemp saved for Fridge $fridgeNum!');</script>";
+    } else {
+      echo "<script>alert('Error updating database: " . addslashes($conn->error) . "');</script>";
+    }
+  }
+}
+
+$conn->close();
+?>
   </body>
 </html>

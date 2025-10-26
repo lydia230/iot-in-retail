@@ -1,7 +1,6 @@
 body {
-  background-color: #f8f9fa;
   font-family: Arial, sans-serif;
-  text-align: center;
+  background-color: #f5f6fa;
   margin: 0;
   padding: 0;
 }
@@ -9,29 +8,61 @@ body {
 .header-container {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  width: 85%;
-  margin: 20px auto;
+  align-items: flex-end;
+  padding: 10px 100px 0 100px;
 }
 
-#addUserBtn {
-  background-color: #007bff;
-  color: white;
-  border: none;
-  border-radius: 6px;
-  padding: 8px 16px;
-  font-size: 14px;
+.tabs {
+  display: flex;
+  gap: 5px;
+}
+
+.tab {
+  background-color: #6c8ebf;
+  border: 1px solid #ccc;
+  border-bottom: none;
+  padding: 5px 25px;
+  border-top-left-radius: 8px;
+  border-top-right-radius: 8px;
   cursor: pointer;
-  transition: 0.2s ease-in-out;
+  font-weight: 500;
+  color: white;
+  text-decoration: none;
+  transition: background-color 0.3s, transform 0.2s;
 }
 
-#addUserBtn:hover {
-  background-color: #0056b3;
+.tab:hover {
+  background-color: #cce5ff;
+  color: black;
+}
+
+.tab.active {
+  background-color: #6c8ebf;
+  color: white;
+}
+
+h1 {
+  font-size: 30px;
+  color: #333;
+  margin: 0;
 }
 
 hr {
-  margin: 15px auto;
-  width: 90%;
+  margin-top: 0;
+  border: none;
+  border-top: 5px solid #ccc;
+}
+
+.tab-content {
+  background-color: #6c8ebf;
+  color: white;
+  padding: 40px;
+  border: 1px solid #ccc;
+  border-top: none;
+  border-radius: 0 0 8px 8px;
+  text-align: center;
+  width: 60%;
+  margin: 0 auto;
 }
 
 #fridge1, #fridge2 {
@@ -77,28 +108,28 @@ canvas {
 .modifiers {
   display: flex;
   flex-direction: column;
+  align-items: center; 
   gap: 10px;
   margin-top: 10px;
-  width: 75%;
-  max-width: 250px;
+  width: 100%;
 }
 
 .max {
   display: flex;
   justify-content: center;
-  align-self: center;
-  gap: 10px;
-  width: 60%;
+  width: 100%;
 }
 
 .max input {
   width: 60px;
-  padding: 4px, 6px;
-  border-radius: 5px;
+  height: 20px;
+  padding: 6px;
+  border-radius: 6px;
   border: 1px solid #ccc;
-  font-size: 12px;
+  font-size: 13px;
   text-align: center;
-  box-shadow: 0 1px 2px rgba(0,0,0,0.05);
+  box-shadow: 0 1px 2px rgba(0, 0, 0, 0.05);
+  transition: border-color 0.3s, box-shadow 0.3s;
 }
 
 .customize-btn {

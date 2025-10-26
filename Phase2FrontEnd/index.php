@@ -10,6 +10,16 @@
 </head>
 
 <body>
+	<header>
+    <div class="header-container">
+      <div class="tabs">
+        <a href="index.php" class="tab active">Add Users</a>
+        <a href="refrigeratorDashboard.php" class="tab">Dashboards</a>
+      </div>
+      <h1>Refrigerator Dashboard</h1>
+    </div>
+    <hr />
+  </header>
 <center><h1>Enter Client Credentials</h1></center>
     <div class="form-container">
         <form method="POST" action="index.php">
@@ -36,8 +46,8 @@
 
 
 	$servername = "localhost";
-	$username = "admin";
-	$password = "123";
+	$username = "root";
+	$password = "";
 	$dbname = "rfid";
 
 	$conn = new mysqli($servername, $username, $password, $dbname);
