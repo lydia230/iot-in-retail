@@ -108,18 +108,27 @@ function manuallyControlFan() {
 }
 
 function setFanGauge(on) {
+    const fanInfo = document.getElementById('fanInfo');
+    fanInfo.innerHTML = '';
+    const fan = pureknob.createKnob(600, 300);
+    fan.setProperty('angleStart', -0.75 * Math.PI);
+    fan.setProperty('angleEnd', 0.75 * Math.PI);
+    fan.setProperty('readonly', true);
+
     isFanON = on;
     if (on) {
-        fanDesign.setValue(100);
-        fanDesign.setProperty('colorFG', '#22ff00ff'); // green
-        fanDesign.setProperty('colorLabel', '#22ff00ff');
-        fanDesign.setProperty('label', 'Fan On');
+        fan.setValue(100);
+        fan.setProperty('colorFG', '#22ff00ff'); // green
+        fan.setProperty('colorLabel', '#22ff00ff');
+        fan.setProperty('label', 'Fan On');
     } else {
-        fanDesign.setValue(0);
-        fanDesign.setProperty('colorFG', '#ff0000ff'); // red
-        fanDesign.setProperty('colorLabel', '#ff0000ff');
-        fanDesign.setProperty('label', 'Fan Off');
+        fan.setValue(0);
+        fan.setProperty('colorFG', '#ff0000ff'); // red
+        fan.setProperty('colorLabel', '#ff0000ff');
+        fan.setProperty('label', 'Fan Off');
     }
+
+    fanInfo.appendChild(fan.node());
 }
 
 document.addEventListener("DOMContentLoaded", () => {
@@ -160,7 +169,7 @@ document.addEventListener("DOMContentLoaded", () => {
             humGauge2.setValue(data.humidity);
         }
 
-        if (data.temperature > 20 && emailSent == false) {
+        if (data.temperature > 60 && emailSent === false) {
             emailSent = true;
 
             fetch("send_email.php", {
@@ -174,26 +183,30 @@ document.addEventListener("DOMContentLoaded", () => {
         }
     }
 
-    setInterval(() => {
+   setInterval(() => {
+    // Only check for reply if an alert email was sent
+    console.log(emailSent);
+    if (emailSent) {
         fetch("client_reply.php")
             .then(res => res.text())
             .then(text => {
                 let reply;
                 try {
                     reply = JSON.parse(text);
+
                     if (reply.status === "yes") {
                         setFanGauge(true); // turn gauge green
                         console.log("Fan started");
                         fetch("fan.php")
                             .then(() => {
-                                emailSent = false;
+                                emailSent = false; // reset after fan runs
                                 setFanGauge(false);
                             })
                             .catch(err => console.error("Error running fan:", err));
                     } else if (reply.status === "no") {
                         setFanGauge(false); // turn gauge red
                         console.log("Fan stopped");
-                        emailSent = false;
+                        emailSent = false; // reset after manual stop
                     }
                 } catch (e) {
                     console.error("Failed to parse JSON:", e, text);
@@ -202,6 +215,8 @@ document.addEventListener("DOMContentLoaded", () => {
             .catch(err => {
                 console.error("Error fetching client reply:", err);
             });
-    }, 10000);
+    }
+}, 10000);
+
 });
 

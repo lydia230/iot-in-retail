@@ -3,11 +3,11 @@
 header("Content-Type: application/json");
 
 // Gmail IMAP credentials
-$email_user = "fridgeclient@gmail.com";
-$email_pass = "xqmc emhc brlu jxri"; // Gmail App Password
+$email_user = "temphum21@gmail.com";
+$email_pass = "gcmv rvsm hvxh ieuu"; // Gmail App Password
 
 // Initialize response
-$response = ["status" => "no"];
+$response = ["status" => "pending"];
 
 // Try to connect to Gmail IMAP and check for new emails
 try {
@@ -31,6 +31,9 @@ try {
             $msg = imap_fetchbody($mail, $email_number, 1);
             if (stripos($msg, "yes") !== false) {
                 $response["status"] = "yes";  // User replied with "yes"
+                break;  // Exit the loop once we find the "yes" reply
+            } elseif (stripos($msg, "no") !== false) {
+                $response["status"] = "no";  // User replied with "yes"
                 break;  // Exit the loop once we find the "yes" reply
             }
         }
