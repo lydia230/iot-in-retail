@@ -182,12 +182,9 @@ document.addEventListener("DOMContentLoaded", () => {
                 try {
                     reply = JSON.parse(text);
                     if (reply.status === "yes") {
-                        // fan should run
+                        setFanGauge(true); // turn gauge green
+                        console.log("Fan started");
                         fetch("fan.php")
-                            .then(() => {
-                                setFanGauge(true); // turn gauge green
-                                console.log("Fan started");
-                            })
                             .then(() => {
                                 emailSent = false;
                                 setFanGauge(false);
