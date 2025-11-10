@@ -1,0 +1,138 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Create Account Page</title>
+  <link rel="stylesheet" href="style.css" />
+</head>
+<body>
+  <header>
+    <nav>
+      <h1>Create Account</h1>
+      <ul>
+        <li><a href="#">Dashboard</a></li>
+        <li><a href="#">Client</a></li>
+        <li><a href="#">Checkout</a></li>
+        <li><a href="#">Inventory</a></li>
+      </ul>
+
+      <div class="lang-dropdown">
+        <button class="lang-btn" id="current-lang">
+          <img src="https://flagcdn.com/w20/us.png" alt="US Flag" />
+          <span>English</span>
+        </button>
+        <div class="lang-menu" id="lang-menu">
+          <button data-lang="en">
+            <img src="https://flagcdn.com/w20/us.png" alt="US Flag" />
+            English
+          </button>
+          <button data-lang="fr">
+            <img src="https://flagcdn.com/w20/fr.png" alt="France Flag" />
+            Français
+          </button>
+        </div>
+      </div>
+    </nav>
+  </header>
+
+  <main>
+    <div class="form-container">
+      <div class="form-box">
+        <h2>Create Account</h2>
+        <p class="subtitle">Create an account to earn points and save purchase history.</p>
+
+        <form action="register.php" method="POST">
+          <div class="input-group">
+            <label>Name</label>
+            <input type="text" name="name" required placeholder="Example" />
+          </div>
+
+          <div class="input-group">
+            <label>Email</label>
+            <input type="email" name="email" required placeholder="example@email.com" />
+          </div>
+
+          <div class="input-group">
+            <label>Password</label>
+            <input type="password" name="password" required placeholder="••••••••" />
+          </div>
+
+          <div class="input-group">
+            <label>Confirm Password</label>
+            <input type="password" name="password" required placeholder="••••••••" />
+          </div>
+
+          <button type="submit" class="btn primary">Register</button>
+        </form>
+
+        <p class="hint">Already have an account?</p>
+        <a href="login.html" class="link">Log In</a>
+      </div>
+    </div>
+  </main>
+
+  <script>
+    const langBtn = document.getElementById("current-lang");
+    const langMenu = document.getElementById("lang-menu");
+
+    langBtn.addEventListener("click", () => {
+      langMenu.classList.toggle("show");
+    });
+
+    const translations = {
+      en: {
+        title: "Create Account",
+        subtitle: "Create an account to earn points and save purchase history.",
+        name: "Name",
+        email: "Email",
+        password: "Password",
+        register: "Register",
+        hint: "Already have an account?",
+        link: "Log In",
+      },
+      fr: {
+        title: "Créer un compte",
+        subtitle: "Créez un compte pour gagner des points et sauvegarder vos achats.",
+        name: "Nom",
+        email: "Courriel",
+        password: "Mot de passe",
+        register: "S'inscrire",
+        hint: "Vous avez déjà un compte?",
+        link: "Connexion",
+      },
+    };
+
+    document.querySelectorAll("#lang-menu button").forEach((btn) => {
+      btn.addEventListener("click", () => {
+        const lang = btn.dataset.lang;
+        document.body.dataset.lang = lang;
+        const t = translations[lang];
+
+        document.querySelector("h2").textContent = t.title;
+        document.querySelector(".subtitle").textContent = t.subtitle;
+        document.querySelectorAll("label")[0].textContent = t.name;
+        document.querySelectorAll("label")[1].textContent = t.email;
+        document.querySelectorAll("label")[2].textContent = t.password;
+        document.querySelector(".btn.primary").textContent = t.register;
+        document.querySelector(".hint").textContent = t.hint;
+        document.querySelector(".link").textContent = t.link;
+
+        if (lang === "fr") {
+          langBtn.innerHTML = `<img src="https://flagcdn.com/w20/fr.png" alt="France Flag" /> <span>Français</span>`;
+        } else {
+          langBtn.innerHTML = `<img src="https://flagcdn.com/w20/us.png" alt="US Flag" /> <span>English</span>`;
+        }
+
+        langMenu.classList.remove("show");
+      });
+    });
+
+    window.addEventListener("click", (e) => {
+      if (!langBtn.contains(e.target) && !langMenu.contains(e.target)) {
+        langMenu.classList.remove("show");
+      }
+    });
+  </script>
+</body>
+</html>
