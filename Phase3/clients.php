@@ -24,7 +24,7 @@
           <li><a href="clientAccount.php">Account</a></li>
           <li><a href="#">Dashboard</a></li>
           <li><a href="clients.php">Client</a></li>
-          <li><a href="#">Checkout</a></li>
+          <li><a href="product-management/checkout.php">Checkout</a></li>
           <li><a href="#">Inventory</a></li>
         </ul>
 

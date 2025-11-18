@@ -18,7 +18,7 @@
           <li><a href="clientAccount.php">Account</a></li>
           <li><a href="#">Dashboard</a></li>
           <li><a href="clients.php">Client</a></li>
-          <li><a href="#">Checkout</a></li>
+          <li><a href="product-management/checkout.php">Checkout</a></li>
           <li><a href="#">Inventory</a></li>
         </ul>
 
@@ -44,32 +44,38 @@
 
   <main>
     <?php
-      $servername = "localhost";
-      $username = "root";
-      $password = "";
-      $dbname = "iotphase3";
+session_start();
 
-      $conn = new mysqli($servername, $username, $password, $dbname);
-      if ($conn->connect_error) {
-        die("<p style='color:red;text-align:center;'>Database connection failed.</p>");
-      }
+// Only allow access if logged in
+if (!isset($_SESSION["client_id"])) {
+    header("Location: login.html");
+    exit();
+}
 
-      // Set client ID (could later come from session)
-      $client_id = 1;
+$client_id = $_SESSION["client_id"]; 
 
-      $client_sql = "SELECT name, email, membership_number, total_points 
-                     FROM clients 
-                     WHERE client_id = $client_id";
-      $client_result = $conn->query($client_sql);
-      $client = $client_result->fetch_assoc();
+$servername = "localhost";
+$username = "root";
+$password = "";
+$dbname = "iotphase3";
 
-      $history_sql = "SELECT purchase_date, receipt_number, items, total, points 
-                      FROM purchase_history 
-                      WHERE client_id = $client_id
-                      ORDER BY purchase_date DESC";
-      $history_result = $conn->query($history_sql);
-    ?>
+$conn = new mysqli($servername, $username, $password, $dbname);
+if ($conn->connect_error) {
+    die("<p style='color:red;text-align:center;'>Database connection failed.</p>");
+}
 
+$client_sql = "SELECT name, email, membership_number, total_points 
+               FROM clients 
+               WHERE client_id = $client_id";
+$client_result = $conn->query($client_sql);
+$client = $client_result->fetch_assoc();
+
+$history_sql = "SELECT purchase_date, receipt_number, items, total, points 
+                FROM purchase_history 
+                WHERE client_id = $client_id
+                ORDER BY purchase_date DESC";
+$history_result = $conn->query($history_sql);
+?>
     <section class="account-card">
       <h2>Account Information</h2>
       <?php if ($client): ?>

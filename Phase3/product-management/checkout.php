@@ -4,26 +4,47 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <link rel="stylesheet" href="css/checkout.css">
+    <link rel="stylesheet" href="css/checkout.css"> 
     <title>Checkout</title>
 </head>
 
 <body>
-    <header>
-        <nav>
-            <h1>Dashboard</h1>
-            <ul>
-                <li><a href="index.php">Dashboard</a></li>
-                <li><a href="add_client.php">Client</a></li>
-                <li><a href="checkout.php">Checkout</a></li>
-                <li><a href="inventory.php">Inventory</a></li>
-            </ul>
-        </nav>
-    </header>
+<header>
+  <nav>
+    <h1>Checkout</h1>
+
+    <ul>
+      <li><a href="../clientAccount.php">Account</a></li>
+      <li><a href="index.php">Dashboard</a></li>
+      <li><a href="../clients.php">Client</a></li>
+      <li><a href="checkout.php">Checkout</a></li>
+      <li><a href="inventory.php">Inventory</a></li>
+    </ul>
+
+    <div class="lang-dropdown">
+      <button class="lang-btn" id="current-lang">
+        <img src="https://flagcdn.com/w20/us.png" alt="US Flag" />
+        <span>English</span>
+      </button>
+
+      <div class="lang-menu" id="lang-menu">
+        <button data-lang="en">
+          <img src="https://flagcdn.com/w20/us.png" alt="US Flag" />
+          English
+        </button>
+        <button data-lang="fr">
+          <img src="https://flagcdn.com/w20/fr.png" alt="France Flag" />
+          Français
+        </button>
+      </div>
+    </div>
+  </nav>
+</header>
 
     <main>
         <div class="cart">
             <input type="hidden" id="barcode-input" name="barcode" />
+
             <di class="products" id="products">
                 <div class="details">
                     <div class="item-details">
@@ -51,18 +72,17 @@
                     <p style="font-size: 20px; font-weight: 500;" id="total-num">$0.00</p>
                 </div>
             </div>
-
         </div>
 
         <div class="checkout">
             <div class="info">
                 <div class="item">
-                    <img id="img" src="item.png" alt="" srcset="" />
+                    <img id="img" src="item.png" />
                     <p>Search for item</p>
                 </div>
 
                 <div class="item">
-                    <img id="img" src="points.png" alt="" srcset="" />
+                    <img id="img" src="points.png" />
                     <p>Search for item</p>
                 </div>
             </div>
@@ -72,19 +92,24 @@
             </div>
         </div>
     </main>
+
+    <!-- Membership popup -->
     <div id="popup" class="popup hidden">
         <div class="popup-content">
             <h2>Membership Card</h2>
             <p>Add your membership card and start earning reward points today!</p>
+
             <br>
             <label class="membership">Membership Code:</label>
             <input type="number" step="1" min="0" class="membership-code" id="membership-code">
             <input type="submit" class="membership-button" id="membership-button"><br>
+
             <p class="failure" id="failure"></p>
             <button id="proceed">Proceed</button>
         </div>
     </div>
 
+    <!-- Payment popup -->
     <div id="payment-popup" class="popup hidden">
         <div class="popup-content">
             <h2>Payment</h2>
@@ -93,8 +118,10 @@
             <div class="payment-options">
                 <input type="radio" id="method-card" name="method">
                 <label for="method-card">💳 Card</label><br>
+
                 <input type="radio" id="method-cash" name="method">
                 <label for="method-cash">💵 Cash</label>
+
                 <p id="radio-error"></p>
             </div>
 
@@ -111,24 +138,29 @@
         </div>
     </div>
 
+    <!-- Final popup -->
     <div id="last-popup" class="popup hidden">
         <div class="popup-content">
             <h2>Thank you for your purchase!</h2>
-            <p> A receipt was sent to your personal email.</p>
+            <p>A receipt was sent to your personal email.</p>
             <button id="finish-process-button" class="finish-process-button">Cancel</button>
         </div>
     </div>
 
+    <!-- Receipt popup -->
     <div id="receipt-popup" class="popup hidden">
         <div class="popup-content receipt">
             <h1>Market Receipt</h1>
             <p>Thank you for your purchase</p>
+
             <div id="receipt-items" class="receipt-items">
                 <div id="date-receipt" class="date-receipt">
                     <p id="date-title" class="date-title">Date</p>
                     <p id="date" class="date"></p>
                 </div>
+
                 <hr class="solid">
+
                 <div id="date-receipt" class="date-receipt">
                     <p id="receipt-item-name" class="receipt-item-name">Item</p>
                     <div class="receipt-items-details">
@@ -136,31 +168,71 @@
                         <p class="receipt-price">Price</p>
                     </div>
                 </div>
-                
-                <div class="receipt-items-content" id="receipt-items-content">
 
-                </div>
+                <div class="receipt-items-content" id="receipt-items-content"></div>
+
                 <hr class="dotted">
+
                 <div id="date-receipt" class="date-receipt">
                     <p>Tax</p>
-                    <p> 14.975%</p>
+                    <p>14.975%</p>
                 </div>
-                
+
                 <div id="date-receipt" class="date-receipt">
                     <p>Subtotal</p>
                     <p id="receipt-total" class="receipt-total"></p>
                 </div>
+
                 <hr class="dotted">
+
                 <div id="date-receipt" class="date-receipt">
                     <p>Points Accumulated</p>
                     <p id="receipt-points" class="receipt-points"></p>
                 </div>
             </div>
-             <button id="finish-process-button" class="finish-process-button" onclick="window.location.reload()">Close</button>
+
+            <button class="finish-process-button" onclick="window.location.reload()">Close</button>
         </div>
     </div>
 
     <script src="css/checkout.js"></script>
-</body>
 
+    <!-- Language dropdown script -->
+    <script>
+        const langBtn = document.getElementById("current-lang");
+        const langMenu = document.getElementById("lang-menu");
+
+        langBtn.addEventListener("click", () => {
+            langMenu.classList.toggle("show");
+        });
+
+        const translationsCheckout = {
+            en: { title: "Checkout" },
+            fr: { title: "Paiement" }
+        };
+
+        document.querySelectorAll("#lang-menu button").forEach((btn) => {
+            btn.addEventListener("click", () => {
+                const lang = btn.dataset.lang;
+
+                document.querySelector("nav h1").textContent = translationsCheckout[lang].title;
+
+                if (lang === "fr") {
+                    langBtn.innerHTML = `<img src="https://flagcdn.com/w20/fr.png"><span>Français</span>`;
+                } else {
+                    langBtn.innerHTML = `<img src="https://flagcdn.com/w20/us.png"><span>English</span>`;
+                }
+
+                langMenu.classList.remove("show");
+            });
+        });
+
+        window.addEventListener("click", (e) => {
+            if (!langBtn.contains(e.target) && !langMenu.contains(e.target)) {
+                langMenu.classList.remove("show");
+            }
+        });
+    </script>
+
+</body>
 </html>
