@@ -44,7 +44,9 @@ if ($clientId) {
             <li><a href="/Phase3/clients.php">Client</a></li>
         <?php endif; ?>
         <li><a href="/Phase3/product-management/checkout.php">Checkout</a></li>
-        <li><a href="/Phase3/product-management/inventory.php">Inventory</a></li>
+        <?php if ($isAdmin): ?>
+            <li><a href="/Phase3/product-management/inventory.php">Inventory</a></li>
+        <?php endif; ?>
       </ul>
 
       <div class="lang-dropdown">
