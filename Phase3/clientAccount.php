@@ -70,10 +70,13 @@ $client_sql = "SELECT name, email, membership_number, total_points
 $client_result = $conn->query($client_sql);
 $client = $client_result->fetch_assoc();
 
-$history_sql = "SELECT purchase_date, receipt_number, items, total, points 
-                FROM purchase_history 
-                WHERE client_id = $client_id
-                ORDER BY purchase_date DESC";
+$history_sql = "SELECT r.receipt_date, r.receipt_id, COUNT(ri.receipt_items_id) AS item_count, r.total_amount, r.points
+ FROM receipts r
+  LEFT JOIN receipt_items ri
+  ON r.receipt_id = ri.receipt_id
+  WHERE r.client_id = client_id
+  GROUP BY r.receipt_id, r.receipt_date, r.total_amount, r.points
+  ORDER BY r.receipt_date DESC;";
 $history_result = $conn->query($history_sql);
 ?>
     <section class="account-card">
@@ -107,10 +110,10 @@ $history_result = $conn->query($history_sql);
           <?php if ($history_result && $history_result->num_rows > 0): ?>
             <?php while ($row = $history_result->fetch_assoc()): ?>
               <tr>
-                <td><?= htmlspecialchars($row['purchase_date']) ?></td>
-                <td>#<?= htmlspecialchars($row['receipt_number']) ?></td>
-                <td><?= htmlspecialchars($row['items']) ?> Items</td>
-                <td>$<?= number_format($row['total'], 2) ?></td>
+                <td><?= htmlspecialchars($row['receipt_date']) ?></td>
+                <td>#<?= htmlspecialchars($row['receipt_id']) ?></td>
+                <td><?= htmlspecialchars($row['item_count']) ?></td>
+                <td>$<?= number_format($row['total_amount'], 2) ?></td>
                 <td><?= htmlspecialchars($row['points']) ?></td>
               </tr>
             <?php endwhile; ?>

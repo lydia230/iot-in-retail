@@ -2,7 +2,7 @@
 $servername = "localhost";
 $username = "root";
 $password = "";
-$dbname = "rfid";
+$dbname = "iotphase3";
 
 $conn = new mysqli($servername, $username, $password, $dbname);
 
