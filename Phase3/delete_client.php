@@ -12,7 +12,7 @@ if ($conn->connect_error) {
 if ($_SERVER["REQUEST_METHOD"] === "POST" && isset($_POST['client_id'])) {
   $client_id = intval($_POST['client_id']);
 
-  $conn->query("DELETE FROM purchase_history WHERE client_id = $client_id");
+  $conn->query("DELETE FROM receipts WHERE client_id = $client_id");
 
   $sql = "DELETE FROM clients WHERE client_id = $client_id";
   if ($conn->query($sql) === TRUE) {

@@ -5,41 +5,16 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/checkout.css"> 
+    <link rel="stylesheet" href="../nav.css">
     <title>Checkout</title>
 </head>
 
 <body>
-<header>
-  <nav>
-    <h1>Checkout</h1>
 
-    <ul>
-      <li><a href="../clientAccount.php">Account</a></li>
-      <li><a href="index.php">Dashboard</a></li>
-      <li><a href="../clients.php">Client</a></li>
-      <li><a href="checkout.php">Checkout</a></li>
-      <li><a href="inventory.php">Inventory</a></li>
-    </ul>
-
-    <div class="lang-dropdown">
-      <button class="lang-btn" id="current-lang">
-        <img src="https://flagcdn.com/w20/us.png" alt="US Flag" />
-        <span>English</span>
-      </button>
-
-      <div class="lang-menu" id="lang-menu">
-        <button data-lang="en">
-          <img src="https://flagcdn.com/w20/us.png" alt="US Flag" />
-          English
-        </button>
-        <button data-lang="fr">
-          <img src="https://flagcdn.com/w20/fr.png" alt="France Flag" />
-          Français
-        </button>
-      </div>
-    </div>
-  </nav>
-</header>
+<?php 
+$page_title = "Checkout"; 
+include "../nav.php"; 
+?>
 
     <main>
         <div class="cart">

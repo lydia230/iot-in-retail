@@ -5,23 +5,17 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <link rel="stylesheet" href="css/inventory.css">
+    <link rel="stylesheet" href="../nav.css">
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet" integrity="sha384-sRIl4kxILFvY47J16cr9ZwB07vP4J8+LH7qKQnuqkuIAvNWLzeN8tE5YBujZqJLB" crossorigin="anonymous">
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/js/bootstrap.bundle.min.js" integrity="sha384-FKyoEForCGlyvwx9Hj09JcYn3nv7wiPVlz7YYwJrWVcXK/BmnVDxM+D2scQbITxI" crossorigin="anonymous"></script>
     <title>Checkout</title>
 </head>
 
 <body>
-    <header>
-        <nav>
-            <h1>Dashboard</h1>
-            <ul>
-                <li><a href="index.php">Dashboard</a></li>
-                <li><a href="add_client.php">Client</a></li>
-                <li><a href="checkout.php">Checkout</a></li>
-                <li><a href="inventory.php">Inventory</a></li>
-            </ul>
-        </nav>
-    </header>
+<?php 
+$page_title = "Checkout"; 
+include "../nav.php"; 
+?>
     <main>
         <div class="notification-container" id="notification-container">
             <div class="notification-title">

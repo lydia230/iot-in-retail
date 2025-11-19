@@ -10,40 +10,6 @@ html, body {
     height: 100%;
 }
 
-nav {
-    all: unset; 
-    height: 60px;
-    width: 100%;
-    display: flex;
-    justify-content: space-between;
-    align-items: center;
-    /* background-color: rgba(86, 178, 214, 0.477);
-    backdrop-filter: blur(); */
-    /* From https://css.glass */
-    background: rgba(134, 147, 163, 0.105);
-    box-shadow: 0 4px 30px rgba(129, 129, 129, 0.379);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(5px);
-    border-radius: 0px 0px 5px 5px;
-    
-}
-
-nav h1 {
-    all: unset;
-    font-weight: 300;
-    font-size: 2em;
-}
-
-nav ul {
-    all: unset; 
-    display: flex !important;
-    justify-content: space-between !important;
-    align-items: center !important;
-    list-style: none !important;
-    padding: 1% !important;
-    gap: 15px !important;
-}
-
 a {
   text-decoration: none !important;
   position: relative !important;
@@ -239,3 +205,7 @@ main {
     overflow-y: auto;
 }
 
+.page-title {
+  font-size: 2rem;
+  font-weight: 400;
+}
