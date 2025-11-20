@@ -45,7 +45,7 @@ $history_sql = "SELECT r.receipt_date, r.receipt_id, COUNT(ri.receipt_items_id) 
  FROM receipts r
   LEFT JOIN receipt_items ri
   ON r.receipt_id = ri.receipt_id
-  WHERE r.client_id = client_id
+  WHERE r.client_id = $client_id
   GROUP BY r.receipt_id, r.receipt_date, r.total_amount, r.points
   ORDER BY r.receipt_date DESC;";
 $history_result = $conn->query($history_sql);
@@ -148,3 +148,4 @@ $history_result = $conn->query($history_sql);
   </script>
 </body>
 </html>
+
