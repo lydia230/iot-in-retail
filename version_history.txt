@@ -1,0 +1,20 @@
+2f61107 - Brian, 2025-11-19 : Update clientAccount.php
+5ead8e0 - Shehryyy, 2025-11-19 : done
+a23ddfc - Shehryyy, 2025-11-18 : done muahahahaha
+3e2ce7c - Brian, 2025-11-18 : Modified Database and changed Receipt History
+06ad894 - Shehryyy, 2025-11-18 : almost there
+84dc487 - lydia230, 2025-11-14 : Scan: Inventory, Receipt, Checkout and Product management is Finsihed. RFID and Barcodes function properly.
+2355730 - Shehryyy, 2025-11-10 : Phase 3 Register, Login, My Account, Clients pages
+db9377e - Shehryyy, 2025-11-10 : database for clients
+5893555 - Shehryyy, 2025-11-09 : create/login page
+fb2eb9a - lydia, 2025-10-26 : FIxed Issues
+bc9a7b5 - lydia, 2025-10-26 : Cleaned up code
+3e72197 - lydia, 2025-10-26 : FInished first review
+f65fa1a - lydia, 2025-10-26 : Merged Shaheryar's files
+56f5903 - lydia, 2025-10-26 : Email proccess works, fan process works and data is displayed.
+9cde2db - lydia, 2025-10-26 : fixed fan gauge
+72495a2 - lydia, 2025-10-26 : Gauges and motor works
+caa29f9 - Shehryyy, 2025-10-25 : Phase 2 FrontEnd
+ab0fc14 - Brian, 2025-10-24 : Modified some files
+fe81abc - Brian, 2025-10-24 : Phase 2 Files
+9ca949b - lydia, 2025-10-23 : Adding files from Phase 1
