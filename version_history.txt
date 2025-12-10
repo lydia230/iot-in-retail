@@ -1,3 +1,5 @@
+4439f02 - lydia230, 2025-12-10 : Added the newest version of the project.
+69a2681 - lydia230, 2025-12-10 : Added all necessary files for the documentation.
 2f61107 - Brian, 2025-11-19 : Update clientAccount.php
 5ead8e0 - Shehryyy, 2025-11-19 : done
 a23ddfc - Shehryyy, 2025-11-18 : done muahahahaha
