@@ -17,30 +17,38 @@ nav {
   backdrop-filter: blur(10px);
   -webkit-backdrop-filter: blur(10px);
   border-radius: 0px 0px 5px 5px;
-  padding: 0 3rem;
+  padding: 0% 1% 0% 1%;
 }
 
+nav h1 {
+  font-size: clamp(0.5rem, 3vw, 1.2rem);
+  font-weight: 400;
+  white-space: nowrap;
+}
+
+
 .nav-right {
-  margin-left: auto;
   display: flex;
   align-items: center;
-  gap: 2rem;
 }
 
 nav ul {
   display: flex !important;
   align-items: center !important;
-  gap: 25px !important;
+  gap: 20px !important;
   margin: 0 !important;
   padding: 0 !important;
   list-style: none !important;
   height: 100%;
+  flex-wrap: nowrap;
+  overflow-x: auto;
 }
 
 nav ul li {
   display: flex;
   align-items: center;
   height: 100%;
+  white-space: nowrap;
 }
 
 nav ul li a {
@@ -48,8 +56,8 @@ nav ul li a {
   align-items: center !important;
   justify-content: center !important;
   height: 60px !important; 
-  padding: 0 2px !important;
-  font-size: 1rem !important;
+  padding: 0.8vw !important;
+  font-size: clamp(0.8rem, 1.6vw, 1.1rem) !important;
   color: #000 !important;
   text-decoration: none !important;
   transition: all 0.3s ease !important;
@@ -140,7 +148,64 @@ nav ul li a:hover {
   border-radius: 3px;
 }
 
+.dark-mode-btn {
+    background: transparent;
+    border: none;
+    font-size: 1.5rem;
+    cursor: pointer;
+    margin-left: 15px;
+    transition: transform 0.2s;
+}
+
+.dark-mode-btn:hover {
+    transform: scale(1.2);
+}
+
+body.dark-mode {
+    background-color: #121212;
+    color: #ffffff;
+}
+
+nav.dark-mode {
+    background: rgba(20, 20, 20, 0.9);
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.5);
+}
+
+.lang-btn.dark-mode {
+    background: rgba(60, 60, 60, 0.6);
+    color: #fff;
+}
+
+.lang-menu.dark-mode {
+    background: rgba(30, 30, 30, 0.95);
+    color: #fff;
+    border: 1px solid #555;
+}
+
+nav.dark-mode ul li a {
+    color: #fff !important;
+}
+
+nav.dark-mode ul li a:hover {
+    color: #ffd700 !important;
+    text-shadow: 0 0 5px #ffd700,
+                 0 0 10px #ffd700,
+                 0 0 15px #ffd700;
+}
+
 @keyframes fadeIn {
   from { opacity: 0; transform: translateY(-5px); }
   to { opacity: 1; transform: translateY(0); }
+}
+
+@media (max-width: 900px) {
+  nav ul {
+    gap: 12px !important;
+  }
+}
+
+@media (max-width: 400px) {
+  nav h1 {
+    font-size: 0.5rem !important;
+  }
 }

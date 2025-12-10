@@ -6,7 +6,8 @@ $dbname = "iotphase3";
 
 $conn = new mysqli($host, $user, $pass, $dbname);
 if ($conn->connect_error) {
-    die("Connection failed: " . $conn->connect_error);
+    echo "<script>alert('Connection failed: {$conn->connect_error}');</script>";
+    exit();
 }
 
 if ($_SERVER["REQUEST_METHOD"] === "POST") {
@@ -16,19 +17,28 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
     $confirm_password = trim($_POST["confirm_password"] ?? "");
 
     if ($name === "" || $email === "" || $password === "" || $confirm_password === "") {
-        die("All fields are required.");
+        echo "<script>alert('All fields are required.'); window.history.back();</script>";
+        exit();
+    }
+
+    if (preg_match('/\d/', $name)) {
+    echo "<script>alert('Name cannot contain numbers.'); window.history.back();</script>";
+    exit();
     }
 
     if (!filter_var($email, FILTER_VALIDATE_EMAIL)) {
-        die("Invalid email format.");
+        echo "<script>alert('Invalid email format.'); window.history.back();</script>";
+        exit();
     }
 
     if ($password !== $confirm_password) {
-        die("Passwords do not match.");
+        echo "<script>alert('Passwords do not match.'); window.history.back();</script>";
+        exit();
     }
 
     if (strlen($password) < 8) {
-        die("Password must be at least 8 characters.");
+        echo "<script>alert('Password must be at least 8 characters.'); window.history.back();</script>";
+        exit();
     }
 
     $check = $conn->prepare("SELECT client_id FROM clients WHERE email = ?");
@@ -38,10 +48,12 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
 
     if ($check->num_rows > 0) {
         $check->close();
-        die("Email already registered.");
+        echo "<script>alert('Email already registered.'); window.history.back();</script>";
+        exit();
     }
     $check->close();
 
+    
     $nextMembership = "M1001"; 
     $res = $conn->query("SELECT membership_number FROM clients ORDER BY client_id DESC LIMIT 1");
     if ($res && $row = $res->fetch_assoc()) {
@@ -49,8 +61,6 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         if (preg_match('/(\d+)/', $last, $m)) {
             $num = intval($m[1]) + 1;
             $nextMembership = 'M' . $num;
-        } else {
-            $nextMembership = "M1001";
         }
     }
     if ($res) $res->free();
@@ -63,7 +73,7 @@ if ($_SERVER["REQUEST_METHOD"] === "POST") {
         header("Location: clientAccount.php");
         exit();
     } else {
-        echo "Error: " . htmlspecialchars($stmt->error);
+        echo "<script>alert('Error: " . addslashes($stmt->error) . "'); window.history.back();</script>";
     }
 
     $stmt->close();

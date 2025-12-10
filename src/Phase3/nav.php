@@ -4,7 +4,6 @@ $host = "localhost";
 $user = "root";
 $pass = "";
 $dbname = "iotphase3";
-
 $conn = new mysqli($host, $user, $pass, $dbname);
 if ($conn->connect_error) {
     die("Connection failed: " . $conn->connect_error);
@@ -25,28 +24,34 @@ if ($clientId) {
     }
     $stmt->close();
 }
+
 ?>
 
 <!DOCTYPE html>
-<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
-<link rel="stylesheet" href="nav.css">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="/Phase3/nav.css">
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css" rel="stylesheet">
+</head>
 
 <header>
   <nav>
     <div class="nav-left">
-      <h1 class="page-title"><?php echo $page_title ?? ''; ?></h1>
+      <h1 class="page-title"><?= ($_SESSION["language"] == 'fr') ? ('Mon Compte') : ('My Account');?></h1>
     </div>
     <div class="nav-right">
       <ul>
-        <li><a href="/Phase3/clientAccount.php">Account</a></li>
-        <li><a href="/Phase3/product-management/index.php">Dashboard</a></li>
+        <li><a href="/Phase3/clientAccount.php"><?= ($_SESSION["language"] == 'fr') ? ('Compte') : ('Account');?></a></li>
+        <li><a href="/Phase3/product-management/index.php"><?= ($_SESSION["language"] == 'fr') ? ('Tableau de Bord') : ('Dashboard');?></a></li>
         <?php if ($isAdmin): ?>
-            <li><a href="/Phase3/clients.php">Client</a></li>
+            <li><a href="/Phase3/clients.php"><?= ($_SESSION["language"] == 'fr') ? ('Client') : ('Client');?></a></li>
         <?php endif; ?>
-        <li><a href="/Phase3/product-management/checkout.php">Checkout</a></li>
+        <li><a href="/Phase3/product-management/checkout.php"><?= ($_SESSION["language"] == 'fr') ? ('Caisse') : ('Checkout');?></a></li>
         <?php if ($isAdmin): ?>
-            <li><a href="/Phase3/product-management/inventory.php">Inventory</a></li>
+            <li><a href="/Phase3/product-management/inventory.php"><?= ($_SESSION["language"] == 'fr') ? ('Inventaire') : ('Inventory');?></a></li>
         <?php endif; ?>
+        <li><a href="/Phase3/signout.php"><?= ($_SESSION["language"] == 'fr') ? ('Se Deconnecter') : ('Sign out');?></a></li>
       </ul>
 
       <div class="lang-dropdown">
@@ -67,6 +72,7 @@ if ($clientId) {
           </button>
         </div>
       </div>
+      <button id="dark-mode-toggle" class="dark-mode-btn">🌙</button>
     </div>
   </nav>
 </header>

@@ -1,5 +1,5 @@
 let barcode = '';
-let customer;
+let client;
 const pay = document.getElementById('payment');
 const code = document.getElementById('membership-code');
 const membershipButton = document.getElementById('membership-button');
@@ -13,8 +13,10 @@ const confirmPayment = document.getElementById('confirm-payment');
 const lastPopup = document.getElementById('last-popup');
 const finalButton = document.getElementById('finish-process-button');
 const receiptPopup = document.getElementById('receipt-popup');
+let productsEpc = [];
+let add = 0;
 
-function createProduct(name, quantity, price) {
+function createProduct(name, quantity, price, epc) {
     const subtotal = document.getElementById('subtotal-num');
     const total = document.getElementById('total-num');
     const products = document.getElementById("products");
@@ -30,13 +32,22 @@ function createProduct(name, quantity, price) {
 
     const itemName = document.createElement('p');
     itemName.textContent = `${name}`;
+    itemName.style.margin = "0";
 
     const detailsQuantity = document.createElement('p');
     detailsQuantity.classList.add('product-indent');
+    detailsQuantity.style.margin = "0";
     detailsQuantity.textContent = `${quantity}`;
     const detailsPrice = document.createElement('p');
     detailsPrice.classList.add('product-indent');
+    detailsPrice.style.margin = "0";
     detailsPrice.textContent = `$${price}`;
+
+    const detailsEpc = document.createElement('p');
+    detailsEpc.classList.add('product-indent');
+    detailsEpc.style.margin = "0";
+    detailsEpc.textContent = `$${epc}`;
+    detailsEpc.hidden = true;
 
 
     const deleteButton = document.createElement('button');
@@ -51,30 +62,24 @@ function createProduct(name, quantity, price) {
     productDetails.appendChild(detailsQuantity);
     productDetails.appendChild(detailsPrice);
     productDetails.appendChild(deleteButton);
+    productDetails.appendChild(detailsEpc);
     products.appendChild(productContainer);
 
     deleteButton.addEventListener('click', () => {
-         let currentQuantity = parseInt(detailsQuantity.textContent);
-
-        if (currentQuantity > 1) {
-            // decrease quantity by 1
-            currentQuantity -= 1;
-            detailsQuantity.textContent = currentQuantity;
-
-            // update subtotal & total
-            const subtotalValue = parseFloat(subtotal.textContent.replace('$', '')) - price;
-            subtotal.textContent = `$${subtotalValue.toFixed(2)}`;
-            const totalValue = calculateTotal(subtotalValue);
-            total.textContent = `$${totalValue.toFixed(2)}`;
-        } else {
-            // if quantity = 1 → remove the whole product
-            productContainer.remove();
-
-            const subtotalValue = parseFloat(subtotal.textContent.replace('$', '')) - price;
-            subtotal.textContent = `$${subtotalValue.toFixed(2)}`;
-            const totalValue = calculateTotal(subtotalValue);
-            total.textContent = `$${totalValue.toFixed(2)}`;
+        
+        const index = productsEpc.indexOf(epc);
+        if (index !== -1) {
+            productsEpc.splice(index, 1);
         }
+        console.log(add);
+        productContainer.remove();
+        const subtotalValue = parseFloat(subtotal.textContent.replace('$', '')) - price;
+        add = subtotalValue
+        console.log(add);
+        subtotal.textContent = `$${subtotalValue.toFixed(2)}`;
+        const totalValue = calculateTotal(subtotalValue);
+        total.textContent = `$${totalValue.toFixed(2)}`;
+        
     });
 }
 
@@ -86,15 +91,18 @@ function createReceipt(item, quantity, price) {
 
     const receiptItemName = document.createElement('p');
     receiptItemName.textContent = item;
+    
 
     const receiptItemDetails = document.createElement('div');
     receiptItemDetails.classList.add('receipt-items-details');
 
     const receiptQuantity = document.createElement('p');
     receiptQuantity.textContent = quantity;
+    
 
     const receiptTotal = document.createElement('p');
     receiptTotal.textContent = parseFloat(quantity * price).toFixed(2);
+    
 
     receiptItemDetails.appendChild(receiptQuantity);
     receiptItemDetails.appendChild(receiptTotal);
@@ -116,55 +124,50 @@ function calculateTotal(subtotal) {
 
 
 document.addEventListener('keydown', function (event) {
+
     if (event.key.length === 1) {
         barcode += event.key;
-    } else if (event.key === 'Enter') {
+    }
+
+    else if (event.key === 'Enter') {
+
+        const scanned = barcode;
+        barcode = "";  
+
+        console.log(productsEpc.includes(scanned));
+        console.log(productsEpc);
+
         fetch("css/product_existence.php", {
             method: "POST",
             headers: { "Content-Type": "application/x-www-form-urlencoded" },
-            body: "code=" + encodeURIComponent(barcode)
+            body: "code=" + encodeURIComponent(scanned)
         })
-            .then(response => response.json())
-            .then(data => {
-                if (data.success) {
-                    const subtotal = document.getElementById('subtotal-num');
-                    const total = document.getElementById('total-num');
-                    const rows = document.getElementsByClassName('item-details');
-                    let found = false;
+        .then(response => response.json())
+        .then(data => {
 
-                    for (let i = 0; i < rows.length; i++) {
-                        const nameElement = rows[i].getElementsByTagName('p')[0];
-                        if (nameElement && nameElement.textContent === data.product.name) {
+            if (data.success && !productsEpc.includes(scanned)) {
+                productsEpc.push(scanned);
 
-                            const parentContainer = rows[i].parentNode;
-                            const itemDetails = parentContainer.getElementsByClassName('other-details')[0];
-                            const details = itemDetails.getElementsByTagName('p');
+                const subtotal = document.getElementById('subtotal-num');
+                const total = document.getElementById('total-num');
 
-                            details[0].textContent = parseInt(details[0].textContent) + 1;
+                createProduct(data.product.name, 1, data.product.price, scanned);
 
-                            subtotal.textContent = `$${calculateSubTotal(parseInt(details[0].textContent), data.product.price).toFixed(2)}`
-                            const subtotalValue = parseFloat(subtotal.textContent.replace('$', ''));
-                            const totalValue = calculateTotal(subtotalValue);
-                            total.textContent = `$${totalValue.toFixed(2)}`;
-                            found = true;
-                            break;
-                        }
-                    }
+                subtotal.textContent = `$${calculateSubTotal(1, data.product.price).toFixed(2)}`
 
-                    if (!found) {
-                        createProduct(data.product.name, 1, data.product.price);
-                        subtotal.textContent = `$${calculateSubTotal(1, data.product.price).toFixed(2)}`
-                        const subtotalValue = parseFloat(subtotal.textContent.replace('$', ''));
-                        const totalValue = calculateTotal(subtotalValue);
-                        total.textContent = `$${totalValue.toFixed(2)}`;
-                    }
+                const subtotalValue = parseFloat(subtotal.textContent.replace('$', ''));
+                add += subtotalValue;
+                subtotal.textContent = `$${calculateSubTotal(1, add).toFixed(2)}`
+                const totalValue = calculateTotal(parseFloat(subtotal.textContent.replace('$', '')));
 
-                }
-            });
-        barcode = '';
+                total.textContent = `$${totalValue.toFixed(2)}`;
+            }
+
+        });
     }
 
 });
+
 
 
 // ----------------------- Final checkout process -----------------------
@@ -189,7 +192,7 @@ membershipButton.addEventListener('click', () => {
             .then(data => {
 
                 if (data.success) {
-                    customer = data.customer;
+                    client = data.client;
                     invalidMembership.textContent = 'Valid membership card!';
                     invalidMembership.style.color = '#a7e87cff';
                 } else {
@@ -204,6 +207,7 @@ membershipButton.addEventListener('click', () => {
 });
 
 proceed.addEventListener('click', () => {
+    console.log(client);
     popup.classList.add('hidden');
     paymentPopup.classList.remove('hidden');
     const amount = document.getElementById('total-num');
@@ -218,14 +222,14 @@ confirmPayment.addEventListener('click', async () => {
     const selectedRadio = document.querySelector('input[name="method"]:checked');
 
     if (selectedRadio) {
-        if (customer != undefined) {
-            const customer_id = customer['customer_id'];
+        if (client != undefined) {
+            const client_id = client['client_id'];
 
             let points = 0;
             let resPoints = await fetch("css/add_checkout.php", {
                 method: "POST",
                 headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                body: "customer_id=" + encodeURIComponent(customer_id)
+                body: "client_id=" + encodeURIComponent(client_id)
             });
             let pointsData = await resPoints.json();
             if (pointsData.success) points = pointsData.points;
@@ -234,7 +238,7 @@ confirmPayment.addEventListener('click', async () => {
             const final_total = amount.textContent.replace('$', '');
             console.log(final_total);
             const receiptInfo = {
-                customer_id: customer_id,
+                client_id: client_id,
                 points: points,
                 amount: final_total
             };
@@ -275,6 +279,8 @@ confirmPayment.addEventListener('click', async () => {
                     total: quantity * price
                 };
 
+
+
                 await fetch("css/receipt_items.php", {
                     method: "POST",
                     headers: { "Content-Type": "application/x-www-form-urlencoded" },
@@ -284,12 +290,13 @@ confirmPayment.addEventListener('click', async () => {
                 let emailReceipt = {
                     total : amountDue.textContent.replace('Amount Due: $', ''),
                     points: 3,
-                    email : customer['email'],
+                    email : client['email'],
                     receipt_id : receipt_id,
                     items : []
                 };
                 
                 const itemRows2 = document.getElementsByClassName('product');
+                
 
                 for (let i = 0; i < itemRows.length; i++) {
                     const itemContainer2 = itemRows2[i].getElementsByClassName('item-details')[0];
@@ -307,21 +314,36 @@ confirmPayment.addEventListener('click', async () => {
                     let productData2 = await resProduct2.json();
                     const price2 = parseFloat(productData2.product['price']);
 
+                    console.log(productsEpc);
+                    let reduceStockResp = await fetch("css/reduce_inventory.php", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                    body: "cart_items=" + encodeURIComponent(JSON.stringify(productsEpc)) 
+                    });
+
+                    let reduceStock = await reduceStockResp.json();
+                    
+
                    emailReceipt.items.push({name : name2, quantity : quantity2, price : price2});
                 }
-                console.log(emailReceipt.items);
-                console.log(emailReceipt);
-                let sentEmailResp = await fetch("css/send_receipt.php", {
-                    method: "POST",
-                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
-                    body: "emailReceipt=" + encodeURIComponent(JSON.stringify(emailReceipt))
-                });
+                    console.log(emailReceipt);
+                
+                    let sentEmailResp = await fetch("css/send_receipt.php", {
+                        method: "POST",
+                        headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                        body: "emailReceipt=" + encodeURIComponent(JSON.stringify(emailReceipt))
+                    });
 
-                let receiptEmail = await sentEmailResp.json();
-                console.log(receiptEmail.message);
+                    let receiptEmail = await sentEmailResp.json();
+                    console.log(receiptEmail.message);
 
-                paymentPopup.classList.add('hidden');
-                lastPopup.classList.remove('hidden');
+                    const radioError = document.getElementById('radio-error');
+                    radioError.textContent = '';
+                    radioError.style.color = '#ffffff';
+                    productsEpc = [];
+                    add = 0;
+                    paymentPopup.classList.add('hidden');
+                    lastPopup.classList.remove('hidden');
             }
         } else {
             const receiptPoints = document.getElementById('receipt-points');
@@ -337,8 +359,26 @@ confirmPayment.addEventListener('click', async () => {
                 String(now.getSeconds()).padStart(2, '0');
             date.textContent = formatted;
 
+            const amount = document.getElementById('total-num');
+            const final_total = amount.textContent.replace('$', '');
             const receiptTotal = document.getElementById('receipt-total');
-            receiptTotal.textContent = amountDue.textContent.replace('Amount Due: ', '');
+            receiptTotal.textContent =`$${final_total}`;
+            
+            
+            const receiptInfo = {
+                client_id: null,
+                points: 0,
+                amount: final_total
+            };
+
+            let resReceipt = await fetch("css/create_receipt.php", {
+                method: "POST",
+                headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                body: "receiptInfo=" + encodeURIComponent(JSON.stringify(receiptInfo))
+            });
+            let receiptData = await resReceipt.json();
+            const receipt_id = receiptData.receipt_id;
+            console.log(receipt_id);
 
             const itemRows = document.getElementsByClassName('product');
 
@@ -349,19 +389,43 @@ confirmPayment.addEventListener('click', async () => {
                 const detailsContainer = itemRows[i].getElementsByClassName('other-details')[0];
                 const quantity = parseInt(detailsContainer.getElementsByTagName('p')[0].textContent);
 
-
                 let resProduct = await fetch("css/search_product.php", {
                     method: "POST",
                     headers: { "Content-Type": "application/x-www-form-urlencoded" },
                     body: "name=" + encodeURIComponent(name)
                 });
+
                 let productData = await resProduct.json();
                 const price = parseFloat(productData.product['price']);
+                const item_id = productData.product['product_id'];
+
+                const receiptItem = {
+                    receipt_id: receipt_id,
+                    product_id: item_id,
+                    quantity: quantity,
+                    price: price,
+                    total: quantity * price
+                };
+
+                await fetch("css/receipt_items.php", {
+                    method: "POST",
+                    headers: { "Content-Type": "application/x-www-form-urlencoded" },
+                    body: "receiptItems=" + encodeURIComponent(JSON.stringify(receiptItem))
+                });
+
+                console.log(productsEpc);
+                let reduceStockResp = await fetch("css/reduce_inventory.php", {
+                    method: "POST",
+                    headers: {"Content-Type": "application/x-www-form-urlencoded"},
+                    body: "cart_items=" + encodeURIComponent(JSON.stringify(productsEpc)) 
+                });
+
+                let reduceStock = await reduceStockResp.json();
+                    
 
                 createReceipt(name, quantity, price);
-
             }
-
+            productsEpc = [];
             paymentPopup.classList.add('hidden');
             receiptPopup.classList.remove('hidden');
         }

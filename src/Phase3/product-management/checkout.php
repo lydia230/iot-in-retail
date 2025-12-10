@@ -14,6 +14,10 @@
 <?php 
 $page_title = "Checkout"; 
 include "../nav.php"; 
+if (!isset($_SESSION["client_id"])) {
+        header("Location: ../login.html");
+        exit();
+      }
 ?>
 
     <main>
@@ -68,7 +72,6 @@ include "../nav.php";
         </div>
     </main>
 
-    <!-- Membership popup -->
     <div id="popup" class="popup hidden">
         <div class="popup-content">
             <h2>Membership Card</h2>
@@ -76,7 +79,7 @@ include "../nav.php";
 
             <br>
             <label class="membership">Membership Code:</label>
-            <input type="number" step="1" min="0" class="membership-code" id="membership-code">
+            <input type="text" class="membership-code" id="membership-code">
             <input type="submit" class="membership-button" id="membership-button"><br>
 
             <p class="failure" id="failure"></p>
@@ -84,7 +87,6 @@ include "../nav.php";
         </div>
     </div>
 
-    <!-- Payment popup -->
     <div id="payment-popup" class="popup hidden">
         <div class="popup-content">
             <h2>Payment</h2>
@@ -113,7 +115,6 @@ include "../nav.php";
         </div>
     </div>
 
-    <!-- Final popup -->
     <div id="last-popup" class="popup hidden">
         <div class="popup-content">
             <h2>Thank you for your purchase!</h2>
@@ -122,11 +123,10 @@ include "../nav.php";
         </div>
     </div>
 
-    <!-- Receipt popup -->
     <div id="receipt-popup" class="popup hidden">
         <div class="popup-content receipt">
             <h1>Market Receipt</h1>
-            <p>Thank you for your purchase</p>
+            <p>Thank you for your purchase!</p>
 
             <div id="receipt-items" class="receipt-items">
                 <div id="date-receipt" class="date-receipt">
@@ -154,7 +154,7 @@ include "../nav.php";
                 </div>
 
                 <div id="date-receipt" class="date-receipt">
-                    <p>Subtotal</p>
+                    <p>Total</p>
                     <p id="receipt-total" class="receipt-total"></p>
                 </div>
 
@@ -171,8 +171,8 @@ include "../nav.php";
     </div>
 
     <script src="css/checkout.js"></script>
+    <script src="../nav.js"></script>
 
-    <!-- Language dropdown script -->
     <script>
         const langBtn = document.getElementById("current-lang");
         const langMenu = document.getElementById("lang-menu");
@@ -181,16 +181,76 @@ include "../nav.php";
             langMenu.classList.toggle("show");
         });
 
-        const translationsCheckout = {
-            en: { title: "Checkout" },
-            fr: { title: "Paiement" }
+        const visibleText = {
+            en: {
+                table: { item: "Item", quantity: "Quantity", price: "Price", delete: "Delete" },
+                priceSummary: { subtotal: "Subtotal", tax: "Tax", amountDue: "Amount due" },
+                search: "Search for item",
+                payment: "Payment"
+            },
+            fr: {
+                table: { item: "Article", quantity: "Qté", price: "Prix", delete: "Supprimer" },
+                priceSummary: { subtotal: "Sous-total", tax: "Taxe", amountDue: "Montant dû" },
+                search: "Rechercher un article",
+                payment: "Paiement"
+            }
         };
 
         document.querySelectorAll("#lang-menu button").forEach((btn) => {
             btn.addEventListener("click", () => {
                 const lang = btn.dataset.lang;
+                if (lang == 'en'){
+                    fetch('../post_language.php', {
+                    method: 'POST',
+                    credentials: "include",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        language: "en"
+                    })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log("Server says:", data);
+                    })
+                    .catch(err => console.error(err));
+                }
+                if (lang == 'fr') {
+                    fetch('../post_language.php', {
+                    method: 'POST',
+                    credentials: "include",
+                    headers: {
+                        'Content-Type': 'application/json'
+                    },
+                    body: JSON.stringify({
+                        language: "fr"
+                    })
+                    })
+                    .then(res => res.json())
+                    .then(data => {
+                        console.log("Server says:", data);
+                    })
+                    .catch(err => console.error(err));
+                }
+                const t = visibleText[lang];
 
-                document.querySelector("nav h1").textContent = translationsCheckout[lang].title;
+                const headers = document.querySelectorAll(".cart .details .other-details p, .cart .details .item-details p");
+                if (headers.length === 4) {
+                    headers[0].textContent = t.table.item;
+                    headers[1].textContent = t.table.quantity;
+                    headers[2].textContent = t.table.price;
+                    headers[3].textContent = t.table.delete;
+                }
+
+                document.querySelector(".cart .price .tax:nth-child(1) p:first-child").textContent = t.priceSummary.subtotal;
+                document.querySelector(".cart .price .tax:nth-child(2) p:first-child").textContent = t.priceSummary.tax;
+                document.querySelector(".cart .price .tax:nth-child(3) p:first-child").textContent = t.priceSummary.amountDue;
+
+                document.querySelectorAll(".checkout .item p").forEach(p => p.textContent = t.search);
+
+                const paymentEl = document.getElementById("payment");
+                if (paymentEl) paymentEl.textContent = t.payment;
 
                 if (lang === "fr") {
                     langBtn.innerHTML = `<img src="https://flagcdn.com/w20/fr.png"><span>Français</span>`;
@@ -199,6 +259,8 @@ include "../nav.php";
                 }
 
                 langMenu.classList.remove("show");
+                location.reload();
+                console.log('Reloaded page');
             });
         });
 
@@ -207,7 +269,39 @@ include "../nav.php";
                 langMenu.classList.remove("show");
             }
         });
+
+        {
+                const lang = '<?php echo $_SESSION["language"];?>';
+                const t = visibleText[lang];
+
+                const headers = document.querySelectorAll(".cart .details .other-details p, .cart .details .item-details p");
+                if (headers.length === 4) {
+                    headers[0].textContent = t.table.item;
+                    headers[1].textContent = t.table.quantity;
+                    headers[2].textContent = t.table.price;
+                    headers[3].textContent = t.table.delete;
+                }
+
+                document.querySelector(".cart .price .tax:nth-child(1) p:first-child").textContent = t.priceSummary.subtotal;
+                document.querySelector(".cart .price .tax:nth-child(2) p:first-child").textContent = t.priceSummary.tax;
+                document.querySelector(".cart .price .tax:nth-child(3) p:first-child").textContent = t.priceSummary.amountDue;
+
+                document.querySelectorAll(".checkout .item p").forEach(p => p.textContent = t.search);
+
+                const paymentEl = document.getElementById("payment");
+                if (paymentEl) paymentEl.textContent = t.payment;
+
+                if (lang === "fr") {
+                    langBtn.innerHTML = `<img src="https://flagcdn.com/w20/fr.png"><span>Français</span>`;
+                } else {
+                    langBtn.innerHTML = `<img src="https://flagcdn.com/w20/us.png"><span>English</span>`;
+                }
+
+                langMenu.classList.remove("show");
+            }
+
     </script>
+
 
 </body>
 </html>

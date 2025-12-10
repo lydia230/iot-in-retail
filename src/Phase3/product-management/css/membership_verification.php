@@ -11,15 +11,15 @@ if ($conn->connect_error) {
     exit;
 }
 $membership = $_POST['membershipCode'] ?? '';
-$sql1 = "SELECT * FROM customer WHERE membership = ?";
+$sql1 = "SELECT * FROM clients WHERE membership_number = ?";
 $stmt1 = $conn->prepare($sql1);
 $stmt1->bind_param("s", $membership);
 $stmt1->execute();
 $result1 = $stmt1->get_result();
-$customer = $result1->fetch_assoc();
+$client = $result1->fetch_assoc();
  
-if ($customer) {
-    echo json_encode(['success' => true, 'customer' => $customer]);
+if ($client) {
+    echo json_encode(['success' => true, 'client' => $client]);
 } else {
     echo json_encode(['success' => false, 'message' => 'Invalid membership!']);
 }

@@ -44,7 +44,7 @@ main {
     display: flex;
     justify-content: space-between;
     padding: 10px;
-    background: #ffffff;
+    background: rgba(193, 236, 255, 0.8);
     border-radius: 6px;
     box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
 }
@@ -172,7 +172,9 @@ main {
 }
 
 .membership-button,
-#proceed {
+#proceed,
+#confirm-payment,
+#cancel-payment {
     margin-top: 10px;
     width: 40%;
     padding: 6px;
@@ -189,6 +191,7 @@ main {
     flex-direction: column;
     gap: 10px;
 }
+
 
 .receipt-items {
     background: rgba(174, 194, 197, 0.5);
@@ -240,4 +243,12 @@ main img {
 .page-title {
   font-size: 2rem;
   font-weight: 400;
+}
+
+.receipt-items-details {
+    display: flex;
+    flex-direction: row;
+    justify-content: space-evenly;
+    align-items: center;
+    gap: 50px;
 }

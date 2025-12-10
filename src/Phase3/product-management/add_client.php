@@ -81,7 +81,7 @@
 
 		$creationDate = date("Y-m-d H:i:s");
 
-		$sql = "INSERT INTO client (first_name, last_name, email, phone_number, creation_date) VALUES ('$fName','$lName','$email', '$phone', '$creationDate')";
+		$sql = "INSERT INTO clients (first_name, last_name, email, phone_number, creation_date) VALUES ('$fName','$lName','$email', '$phone', '$creationDate')";
 
 		if ($conn->query($sql) === TRUE) {
 			echo "New record created!";

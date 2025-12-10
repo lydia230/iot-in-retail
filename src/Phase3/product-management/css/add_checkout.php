@@ -11,24 +11,21 @@ if ($conn->connect_error) {
     exit;
 }
 
-$customer_id = $_POST['customer_id'] ?? '';
+$client_id = $_POST['client_id'] ?? '';
 
-$sql1 = "SELECT * FROM customer WHERE customer_id = ?";
+$sql1 = "SELECT * FROM clients WHERE client_id = ?";
 $stmt1 = $conn->prepare($sql1);
-$stmt1->bind_param("i", $customer_id);
+$stmt1->bind_param("i", $client_id);
 $stmt1->execute();
 $result1 = $stmt1->get_result();
 $customer = $result1->fetch_assoc();
 
 if ($customer) {
-    $sql2 = "UPDATE customer SET points = points + 3 WHERE customer_id = ?";
+    $sql2 = "UPDATE clients SET total_points = total_points + 3 WHERE client_id = ?";
     $stmt2 = $conn->prepare($sql2);
-    $stmt2->bind_param("i", $customer_id);
+    $stmt2->bind_param("i", $client_id);
     $stmt2->execute();
 
-    // $stmt1->execute();
-    // $result1 = $stmt1->get_result();
-    // $customer = $result1->fetch_assoc();
     echo json_encode([
         'success' => true,
         'points'=> 3

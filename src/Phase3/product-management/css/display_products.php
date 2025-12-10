@@ -10,13 +10,11 @@ if ($conn->connect_error) {
     echo json_encode(['success' => false, 'message' => 'Database error']);
     exit;
 }
-$data = json_decode($_POST['receiptInfo'], true);
 
-$sql1 = "INSERT INTO receipts (client_id, total_amount, points, receipt_date) VALUES(?, ?, ?, NOW())";
+$sql1 = "SELECT * FROM products";
 $stmt1 = $conn->prepare($sql1);
-$stmt1->bind_param("idi", $data['client_id'], $data['amount'], $data['points']);
 $stmt1->execute();
-$receipt_id = $conn->insert_id;
+$result1 = $stmt1->get_result();
+$product = $result1->fetch_all();
 
-echo json_encode(['receipt_id' => $receipt_id]);
-?>
+echo json_encode(["products" => $product, "num" => $result1->num_rows]);
